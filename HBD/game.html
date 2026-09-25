@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Find Me ♡</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;overflow-x:hidden;font-family:Arial,sans-serif;background:linear-gradient(180deg,#f8b1d2 0%,#f7b9da 35%,#edb9df 62%,#cbb9e9 100%);color:#7f3e62}
+.sky{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.cloud{position:absolute;width:190px;height:55px;background:rgba(255,236,247,.65);border-radius:100px;opacity:.85;filter:blur(2px)}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:85px;height:85px;left:25px;bottom:15px}
+.cloud:after{width:105px;height:105px;right:20px;bottom:10px}
+.c1{left:-60px;bottom:6%}.c2{right:-65px;bottom:18%;transform:scale(1.25)}.c3{left:8%;top:10%;transform:scale(.5);opacity:.3}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;background-image:radial-gradient(rgba(255,255,255,.9) 1px,transparent 1px);background-size:4px 4px}.page{position:relative;z-index:2;width:min(720px,96vw);min-height:100vh;margin:auto;padding:18px 8px 30px}
+.top{text-align:center}.mini{font-size:10px;letter-spacing:3px;color:white}.top h1{font-size:clamp(42px,8vw,66px);font-weight:900;color:#7f3e62;text-shadow:2px 3px #ffffff55}.top p{margin:5px 0 14px;font-size:14px;font-weight:700}
+.game{background:rgba(255,250,253,.78);border:1px solid rgba(199,59,120,.18);border-radius:12px;padding:11px;box-shadow:0 14px 35px rgba(120,48,87,.12)}
+.words-title{text-align:center;font-weight:800;font-size:13px;margin-bottom:8px}
+.words{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 6px;margin-bottom:10px}
+.word{padding:4px 6px;background:rgba(255,255,255,.52);border:1px solid rgba(199,59,120,.22);border-radius:4px;font-size:9px;font-weight:700}
+.word.found{text-decoration:line-through;background:#f5aacb;color:#7f3e62;opacity:1;box-shadow:0 0 0 1px rgba(199,59,120,.18)}
+.board{width:min(650px,100%);aspect-ratio:1;display:grid;grid-template-columns:repeat(15,1fr);border-left:1px solid rgba(127,62,98,.28);border-top:1px solid rgba(127,62,98,.28);background:rgba(255,255,255,.28);touch-action:none;user-select:none;margin:auto}
+.cell{display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(127,62,98,.28);border-bottom:1px solid rgba(127,62,98,.28);color:#7f3e62;font-size:clamp(9px,2.7vw,18px);font-weight:700}
+.cell.selected{background:#f9d7e7}
+.cell.found{background:#f5aacb;color:#fff;font-weight:900;box-shadow:inset 0 0 0 1px rgba(199,59,120,.28)}
+.status{display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:12px;font-weight:800}
+.counter{background:#fff;border-radius:99px;padding:6px 10px}.reset{border:0;border-radius:99px;padding:7px 12px;background:#c73b78;color:white;font-weight:700}
+.message{text-align:center;min-height:20px;margin-top:7px;font-size:12px;font-weight:800}
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(127,62,98,.38);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.3s;padding:20px}
+.overlay.show{opacity:1;pointer-events:auto}.popup{width:min(390px,90vw);background:white;border-radius:20px;padding:28px 22px;text-align:center;box-shadow:0 20px 50px #001e3c40}
+.popup .heart{font-size:48px}.popup h2{color:#7f3e62;margin:7px 0;font-size:28px}.popup p{color:#8b5a73;font-size:14px;line-height:1.5;margin-bottom:18px}.popup button{border:0;border-radius:99px;padding:11px 22px;background:#c73b78;color:#fff;font-weight:700}
+</style>
+</head>
+<body>
+<div class="sky"><div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div></div><div class="grain"></div>
+<main class="page">
+<header class="top">
+<div class="mini">A LITTLE BIRTHDAY GAME ♡</div>
+<h1>FIND ME</h1>
+<p>Find the 20 hidden birthday words in the grid below.<br>Take your time &amp; find them all ♡</p>
+</header>
+<section class="game">
+<div class="words-title">FIND THESE 20 BIRTHDAY WORDS</div>
+<div class="words" id="wordList"></div>
+<div class="board" id="board"></div>
+<div class="status"><div class="counter">Found: <span id="foundCount">0</span>/20</div></div>
+<div class="message" id="message">Tap and drag across a word ♡</div>
+</section>
+</main>
+<div class="overlay" id="overlay"><div class="popup"><div class="heart">♡</div><h2>You Found Them All!</h2><p>You found every little word.<br>Maybe you found a little piece of my heart too ♡</p><button onclick="location.href='gift.html'">Back to Gifts</button></div></div>
+<script>
+const N=15;
+const WORDS=["BIRTHDAY","WISH","HAPPINESS","LOVE","JOY","SMILE","DREAMS","HEALTH","SUCCESS","BLESSINGS","CELEBRATE","CAKE","CANDLES","PARTY","MEMORIES","SPECIAL","LAUGHTER","FUN","HOPE","ALWAYS"];
+const DIR=[[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+let grid,placed,found=new Set(),drag=false,start=null,current=[];
+const board=document.getElementById("board"),list=document.getElementById("wordList"),msg=document.getElementById("message");
+
+function empty(){return Array.from({length:N},()=>Array(N).fill(""))}
+function can(w,r,c,dr,dc,g){for(let i=0;i<w.length;i++){let R=r+dr*i,C=c+dc*i;if(R<0||R>=N||C<0||C>=N||g[R][C]&&g[R][C]!=w[i])return false}return true}
+function put(w,g){
+ let a=[];
+ for(const [dr,dc] of DIR)for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(can(w,r,c,dr,dc,g))a.push([r,c,dr,dc]);
+ if(!a.length)return false;
+ let [r,c,dr,dc]=a[Math.floor(Math.random()*Math.min(a.length,25))];
+ for(let i=0;i<w.length;i++)g[r+dr*i][c+dc*i]=w[i];
+ placed.push({w,r,c,dr,dc});return true
+}
+function build(){
+ for(let attempt=0;attempt<100;attempt++){
+  grid=empty();placed=[];let ok=true;
+  for(const w of [...WORDS].sort(()=>Math.random()-.5))if(!put(w,grid)){ok=false;break}
+  if(ok){fill();return}
+ }
+ grid=empty();placed=[];WORDS.forEach(w=>put(w,grid));fill()
+}
+function fill(){let a="ABCDEFGHIJKLMNOPQRSTUVWXYZ";for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(!grid[r][c])grid[r][c]=a[Math.floor(Math.random()*26)]}
+function render(){
+ list.innerHTML=WORDS.map(w=>`<span class="word" data-w="${w}">${w}</span>`).join("");
+ board.innerHTML="";
+ for(let r=0;r<N;r++)for(let c=0;c<N;c++){let d=document.createElement("div");d.className="cell";d.textContent=grid[r][c];d.dataset.r=r;d.dataset.c=c;board.appendChild(d)}
+}
+function cell(r,c){return board.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`)}
+function between(a,b){
+ let dr=b.r-a.r,dc=b.c-a.c;
+ if(dr&&dc&&Math.abs(dr)!=Math.abs(dc))return [];
+ let sr=Math.sign(dr),sc=Math.sign(dc),n=Math.max(Math.abs(dr),Math.abs(dc)),x=[];
+ for(let i=0;i<=n;i++)x.push({r:a.r+sr*i,c:a.c+sc*i});
+ return x
+}
+function clearTemp(){document.querySelectorAll(".selected").forEach(x=>x.classList.remove("selected"));current=[]}
+function update(end){clearTemp();current=between(start,end);current.forEach(p=>cell(p.r,p.c)?.classList.add("selected"))}
+function pos(e){
+ let x=e.clientX,y=e.clientY,d=document.elementFromPoint(x,y);
+ return d?.classList.contains("cell")?{r:+d.dataset.r,c:+d.dataset.c}:null
+}
+board.addEventListener("pointerdown",e=>{let p=pos(e);if(!p)return;e.preventDefault();drag=true;start=p;clearTemp()});
+board.addEventListener("pointermove",e=>{if(!drag)return;let p=pos(e);if(p)update(p)});
+window.addEventListener("pointerup",()=>{
+ if(!drag)return;drag=false;
+ let word=current.map(p=>grid[p.r][p.c]).join(""),rev=word.split("").reverse().join(""),match=WORDS.find(w=>w==word||w==rev);
+ if(match&&!found.has(match)){
+  found.add(match);current.forEach(p=>cell(p.r,p.c).classList.remove("selected"));current.forEach(p=>cell(p.r,p.c).classList.add("found"));
+  document.querySelector(`[data-w="${match}"]`).classList.add("found");
+  document.getElementById("foundCount").textContent=found.size;msg.textContent=`You found ${match}! ♡`;
+  if(found.size===WORDS.length)setTimeout(()=>document.getElementById("overlay").classList.add("show"),500);
+ }else{clearTemp();msg.textContent="Not a word — try again ♡"}
+ start=null;current=[]
+});
+function newGame(){found.clear();document.getElementById("foundCount").textContent=0;document.getElementById("overlay").classList.remove("show");msg.textContent="Tap and drag across a word ♡";build();render()}
+newGame();
+</script>
+</body>
+</html>

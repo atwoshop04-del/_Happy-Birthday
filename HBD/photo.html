@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ♡</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500&display=swap');
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 12% 18%,rgba(255,255,255,.62),transparent 18%),
+    radial-gradient(circle at 88% 58%,rgba(255,255,255,.58),transparent 20%),
+    radial-gradient(circle at 30% 84%,rgba(255,240,248,.45),transparent 17%),
+    radial-gradient(circle at 72% 82%,rgba(248,215,238,.45),transparent 22%),
+    linear-gradient(180deg,#f8b1d2 0%,#f7b9da 35%,#edb9df 62%,#cbb9e9 100%);
+  color:#a45b73;
+  font-family:"DM Sans",sans-serif;
+}
+
+.page{
+  width:min(1150px,94vw);
+  min-height:100vh;
+  margin:auto;
+  padding:28px 0 35px;
+  position:relative;
+}
+
+/* soft watercolor glows */
+.bg-glow{
+  position:fixed;
+  width:210px;
+  height:120px;
+  border-radius:50%;
+  background:rgba(255,255,255,.24);
+  filter:blur(30px);
+  pointer-events:none;
+}
+.glow1{left:-45px;top:15%;transform:rotate(-12deg)}
+.glow2{right:-35px;top:48%;transform:rotate(18deg)}
+.glow3{left:25%;bottom:-25px;width:270px;height:130px;opacity:.65}
+
+/* back */
+.back{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:0;
+  background:none;
+  color:#bd7188;
+  font-size:13px;
+  cursor:pointer;
+  padding:5px;
+}
+.back:hover{color:#9f526d}
+
+/* heading */
+.heading{
+  text-align:center;
+  margin:5px 0 30px;
+}
+.heading .bow{
+  color:#c97d94;
+  font-size:26px;
+  margin-bottom:2px;
+}
+.heading h1{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(42px,6vw,62px);
+  font-weight:500;
+  font-style:italic;
+  line-height:.9;
+  color:#a6536d;
+}
+.heading p{
+  margin-top:11px;
+  font-size:11px;
+  letter-spacing:2px;
+  color:#bb7a8f;
+}
+.divider{
+  margin:15px auto 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  color:#d08399;
+}
+.divider:before,.divider:after{
+  content:"";
+  width:45px;
+  height:1px;
+  background:#dfb1bf;
+}
+
+/* gallery */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px 24px;
+  align-items:start;
+  padding:0 10px;
+}
+.photo-card{
+  background:#fffdfd;
+  padding:10px 10px 13px;
+  box-shadow:0 7px 18px rgba(150,76,102,.10);
+  border:1px solid rgba(210,143,163,.22);
+  position:relative;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.photo-card:nth-child(1){transform:rotate(-2deg)}
+.photo-card:nth-child(2){transform:rotate(1.5deg)}
+.photo-card:nth-child(3){transform:rotate(-1deg)}
+.photo-card:nth-child(4){transform:rotate(2deg)}
+.photo-card:nth-child(5){transform:rotate(1.5deg)}
+.photo-card:nth-child(6){transform:rotate(-2deg)}
+.photo-card:nth-child(7){transform:rotate(1deg)}
+.photo-card:nth-child(8){transform:rotate(-1.5deg)}
+.photo-card:hover{
+  transform:translateY(-6px) rotate(0deg) scale(1.015);
+  box-shadow:0 12px 25px rgba(150,76,102,.15);
+  z-index:2;
+}
+.photo{
+  width:100%;
+  aspect-ratio:1 / 1.05;
+  background:#f5dce5;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#c48a9d;
+  position:relative;
+}
+.photo img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+.placeholder{
+  font-size:30px;
+  opacity:.55;
+}
+.number{
+  position:absolute;
+  top:5px;
+  left:5px;
+  min-width:27px;
+  height:27px;
+  padding:0 7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff8fb;
+  color:#b9657f;
+  border-radius:50%;
+  font-family:"Cormorant Garamond",serif;
+  font-size:17px;
+  box-shadow:0 2px 5px rgba(150,76,102,.12);
+}
+.caption{
+  text-align:center;
+  padding-top:9px;
+  font-family:"Cormorant Garamond",serif;
+  font-size:17px;
+  font-style:italic;
+  color:#a65c74;
+}
+.tape{
+  position:absolute;
+  width:55px;
+  height:15px;
+  background:rgba(244,194,208,.72);
+  top:-8px;
+  left:50%;
+  transform:translateX(-50%) rotate(-2deg);
+  opacity:.85;
+  z-index:3;
+}
+.tape.left{left:28%;transform:translateX(-50%) rotate(-8deg)}
+.tape.right{left:70%;transform:translateX(-50%) rotate(7deg)}
+
+/* doodles */
+.doodle{
+  position:absolute;
+  color:#d789a0;
+  opacity:.7;
+  font-size:25px;
+  pointer-events:none;
+}
+.d1{left:1%;top:29%}
+.d2{right:1%;top:37%;font-size:20px}
+.d3{left:3%;bottom:20%;font-size:17px}
+.d4{right:4%;bottom:18%;font-size:24px}
+
+/* footer */
+.footer{
+  text-align:center;
+  margin-top:32px;
+  color:#b9758b;
+}
+.footer .note{
+  font-family:"Cormorant Garamond",serif;
+  font-size:20px;
+  font-style:italic;
+}
+.footer .heart{
+  display:block;
+  margin-top:7px;
+  color:#d27d96;
+}
+
+@media(max-width:800px){
+  .page{
+    width:94vw;
+    padding-top:20px;
+  }
+  .gallery{
+    grid-template-columns:repeat(2,1fr);
+    gap:20px 15px;
+    padding:0 3px;
+  }
+  .heading{margin-bottom:25px}
+  .heading h1{font-size:48px}
+  .heading p{font-size:9px;letter-spacing:1.5px}
+  .photo-card{padding:7px 7px 10px}
+  .caption{font-size:15px;padding-top:7px}
+  .number{min-width:24px;height:24px;font-size:15px}
+  .doodle{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-glow glow1"></div>
+<div class="bg-glow glow2"></div>
+<div class="bg-glow glow3"></div>
+
+<main class="page">
+
+  <button class="back" onclick="location.href='gift.html'">
+    ← Back to Gifts
+  </button>
+
+  <div class="heading">
+    <div class="bow">🎀</div>
+    <h1>Happy Birthday ♡</h1>
+    <p>just a few of my favorite moments with you</p>
+
+    <div class="divider">
+      <span>♡</span>
+    </div>
+  </div>
+
+  <span class="doodle d1">♡</span>
+  <span class="doodle d2">♡</span>
+  <span class="doodle d3">✦</span>
+  <span class="doodle d4">♡</span>
+
+  <section class="gallery">
+
+    <article class="photo-card">
+      <div class="photo">
+        <span class="number">1</span>
+        <img src="Photo/1.jpg" alt="Memory 1"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+    <article class="photo-card">
+      <div class="tape"></div>
+      <div class="photo">
+        <span class="number">2</span>
+        <img src="Photo/2.jpg" alt="Memory 2"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+    <article class="photo-card">
+      <div class="photo">
+        <span class="number">3</span>
+        <img src="Photo/3.jpg" alt="Memory 3"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+    <article class="photo-card">
+      <div class="photo">
+        <span class="number">4</span>
+        <img src="Photo/4.jpg" alt="Memory 4"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+    <article class="photo-card">
+      <div class="tape left"></div>
+      <div class="photo">
+        <span class="number">5</span>
+        <img src="Photo/5.jpg" alt="Memory 5"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+    <article class="photo-card">
+      <div class="photo">
+        <span class="number">6</span>
+        <img src="Photo/6.jpg" alt="Memory 6"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+    <article class="photo-card">
+      <div class="tape right"></div>
+      <div class="photo">
+        <span class="number">7</span>
+        <img src="Photo/7.jpg" alt="Memory 7"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+    <article class="photo-card">
+      <div class="photo">
+        <span class="number">8</span>
+        <img src="Photo/8.jpg" alt="Memory 8"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="placeholder" style="display:none">♡</span>
+      </div>
+    </article>
+
+  </section>
+
+  <footer class="footer">
+    <div class="note">thanks for being part of my story ♡</div>
+    <div class="heart">♡</div>
+  </footer>
+
+</main>
+
+</body>
+</html>

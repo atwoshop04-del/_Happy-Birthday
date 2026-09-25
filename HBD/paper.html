@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter For You ♡</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500&display=swap');
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 18%,rgba(255,255,255,.62),transparent 18%),
+    radial-gradient(circle at 88% 58%,rgba(255,255,255,.58),transparent 20%),
+    radial-gradient(circle at 30% 84%,rgba(255,240,248,.45),transparent 17%),
+    radial-gradient(circle at 72% 82%,rgba(248,215,238,.45),transparent 22%),
+    linear-gradient(180deg,#f8b1d2 0%,#f7b9da 35%,#edb9df 62%,#cbb9e9 100%);
+  color:#9d5870;
+  font-family:"DM Sans",sans-serif;
+}
+
+.page{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px 18px;
+  position:relative;
+}
+
+.bg-glow{
+  position:absolute;
+  width:190px;
+  height:110px;
+  border-radius:50%;
+  background:rgba(255,255,255,.28);
+  filter:blur(28px);
+  pointer-events:none;
+}
+.glow1{left:-35px;top:16%;transform:rotate(-12deg)}
+.glow2{right:-30px;top:48%;transform:rotate(18deg)}
+.glow3{left:25%;bottom:-25px;width:250px;height:120px;opacity:.6}
+
+.doodle{
+  position:absolute;
+  color:#d98ba2;
+  opacity:.55;
+  pointer-events:none;
+  animation:float 4s ease-in-out infinite;
+}
+.d1{left:12%;top:17%;font-size:25px}
+.d2{right:13%;top:25%;font-size:18px;animation-delay:1s}
+.d3{left:16%;bottom:18%;font-size:17px;animation-delay:1.6s}
+.d4{right:17%;bottom:21%;font-size:23px;animation-delay:.6s}
+
+@keyframes float{
+  50%{transform:translateY(-7px)}
+}
+
+.heading{
+  text-align:center;
+  margin-bottom:16px;
+  z-index:30;
+}
+
+.heading small{
+  display:block;
+  text-transform:uppercase;
+  letter-spacing:3px;
+  font-size:9px;
+  color:#c27a91;
+  margin-bottom:7px;
+}
+
+.heading h1{
+  font:italic 500 clamp(45px,8vw,65px)/.9 "Cormorant Garamond",serif;
+  color:#a65370;
+}
+
+.heading p{
+  margin-top:9px;
+  font-size:12px;
+  color:#b8758a;
+}
+
+/* =========================
+   ENVELOPE SCENE
+========================= */
+.scene{
+  width:min(430px,92vw);
+  height:400px;
+  position:relative;
+  perspective:1200px;
+}
+
+.envelope{
+  position:absolute;
+  width:min(390px,90vw);
+  height:235px;
+  left:50%;
+  bottom:22px;
+  transform:translateX(-50%);
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .35s ease;
+  filter:drop-shadow(0 16px 22px rgba(145,69,96,.14));
+}
+
+.envelope:hover{
+  transform:translateX(-50%) translateY(-4px);
+}
+
+/* Main envelope */
+.env-back{
+  position:absolute;
+  inset:0;
+  border-radius:10px;
+  background:#f8dce7;
+  border:2px solid #d68ca3;
+  overflow:hidden;
+  z-index:1;
+}
+
+/* inner lower paper */
+.env-back:after{
+  display:none;
+}
+
+/* left and right folds */
+.fold-left,
+.fold-right{
+  display:none;
+}
+
+/* Front pocket */
+.front{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  pointer-events:none;
+  clip-path:polygon(0 42%,50% 100%,100% 42%,100% 100%,0 100%);
+  background:#f8dce7;
+  border-bottom:2px solid #d68ca3;
+}
+
+/* Flap that opens */
+.flap{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:150px;
+  z-index:10;
+  background:#fdeaf0;
+  border:2px solid #d68ca3;
+  clip-path:polygon(0 0,100% 0,50% 88%);
+  transform-origin:top center;
+  transition:transform .85s cubic-bezier(.2,.8,.2,1);
+  filter:drop-shadow(0 2px 2px rgba(130,60,86,.08));
+}
+
+/* Seal */
+.seal{
+  position:absolute;
+  z-index:15;
+  top:108px;
+  left:50%;
+  width:53px;
+  height:53px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 28%,#f4b1c5,#db809d);
+  border:3px solid #ca6f8c;
+  box-shadow:
+    0 5px 10px rgba(145,62,92,.18),
+    inset 0 2px 3px rgba(255,255,255,.45);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  transition:opacity .25s, transform .45s;
+}
+
+.seal:after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px dashed rgba(255,255,255,.65);
+  border-radius:50%;
+}
+
+/* =========================
+   LETTER / PAPER
+========================= */
+.letter{
+  position:absolute;
+  z-index:7;
+  left:50%;
+  bottom:18px;
+  width:78%;
+  height:235px;
+  transform:translateX(-50%) translateY(115px);
+  opacity:0;
+  pointer-events:none;
+
+  background:#fffdf8;
+  border:1px solid #e5cfd3;
+  border-radius:2px;
+  box-shadow:0 8px 18px rgba(133,65,91,.12);
+
+  padding:25px 27px 22px;
+  transition:
+    transform .9s cubic-bezier(.2,.8,.2,1),
+    opacity .35s ease;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
+  scrollbar-width:thin;
+}
+
+
+.letter::-webkit-scrollbar{
+  width:5px;
+}
+.letter::-webkit-scrollbar-track{
+  background:transparent;
+}
+.letter::-webkit-scrollbar-thumb{
+  background:#e1aebf;
+  border-radius:10px;
+}
+
+/* subtle paper texture / lines */
+.letter:before{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border:1px solid rgba(216,171,185,.45);
+  pointer-events:none;
+}
+
+.letter:after{
+  content:"♡";
+  position:absolute;
+  right:17px;
+  top:12px;
+  font-size:18px;
+  color:#dda0b3;
+}
+
+.letter-content{
+  position:relative;
+  z-index:2;
+}
+
+.date{
+  font-size:8px;
+  letter-spacing:2px;
+  color:#c27d93;
+  margin-bottom:11px;
+}
+
+.letter h2{
+  font:italic 500 31px/1 "Cormorant Garamond",serif;
+  color:#a65370;
+  margin-bottom:12px;
+}
+
+.letter p{
+  font:17px/1.38 "Cormorant Garamond",serif;
+  color:#87546a;
+}
+
+.sign{
+  margin-top:13px;
+  text-align:right;
+  font:italic 18px/1.15 "Cormorant Garamond",serif;
+  color:#a55c74;
+}
+
+/* =========================
+   OPEN ANIMATION
+========================= */
+
+/* Step 1 -> flap starts opening */
+.envelope.opened .flap{
+  transform:rotateX(180deg);
+  z-index:5;
+}
+
+/* Seal disappears after flap starts */
+.envelope.opened .seal{
+  opacity:0;
+  transform:translateX(-50%) scale(.65);
+}
+
+/* Step 3-5 -> paper physically slides upward
+   from inside the envelope */
+.envelope.opened .letter{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateX(-50%) translateY(25px);
+  z-index:12;
+}
+
+/* Hint */
+.hint{
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  color:#bb7087;
+  font-size:9px;
+  letter-spacing:2px;
+  white-space:nowrap;
+  transition:opacity .3s;
+}
+
+.opened + .hint{
+  opacity:0;
+}
+
+/* little hearts */
+.particle{
+  position:fixed;
+  left:50%;
+  top:52%;
+  z-index:50;
+  color:#d9869f;
+  pointer-events:none;
+  animation:rise 1.8s ease-out forwards;
+}
+
+@keyframes rise{
+  0%{
+    opacity:0;
+    transform:translate(0,0) scale(.5);
+  }
+  20%{opacity:1}
+  100%{
+    opacity:0;
+    transform:translate(var(--x),-125px) rotate(25deg) scale(1.15);
+  }
+}
+
+.back{
+  margin-top:5px;
+  border:1px solid #e0acbd;
+  background:rgba(255,248,250,.8);
+  color:#ae617a;
+  border-radius:999px;
+  padding:9px 18px;
+  font-size:11px;
+  cursor:pointer;
+}
+
+.back:hover{
+  background:#fff;
+}
+
+
+.music-btn{
+  position:fixed;
+  top:18px;
+  right:18px;
+  z-index:100;
+  width:38px;
+  height:38px;
+  border:1px solid #dfa5b7;
+  border-radius:50%;
+  background:rgba(255,250,252,.85);
+  color:#b25f79;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 5px 14px rgba(145,69,96,.10);
+  transition:.25s ease;
+}
+.music-btn:hover{
+  transform:translateY(-2px);
+  background:#fff;
+}
+.music-btn.playing{
+  animation:musicPulse 1.4s ease-in-out infinite;
+}
+@keyframes musicPulse{
+  50%{transform:scale(1.08)}
+}
+
+@media(max-width:600px){
+  .heading{
+    margin-bottom:8px;
+  }
+
+  .heading h1{
+    font-size:47px;
+  }
+
+  .scene{
+    width:95vw;
+    height:360px;
+  }
+
+  .envelope{
+    width:91vw;
+    height:220px;
+  }
+
+  .flap{
+    height:140px;
+  }
+
+  .seal{
+    top:103px;
+  }
+
+  .letter{
+    width:78%;
+    height:280px;
+    padding:22px 20px;
+  }
+
+  .envelope.opened .letter{
+    transform:translateX(-50%) translateY(12px);
+  }
+
+  .letter h2{
+    font-size:28px;
+  }
+
+  .letter p{
+    font-size:16px;
+  }
+
+  .doodle{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<button class="music-btn" id="musicBtn" aria-label="Music">♫</button>
+
+<audio id="letterMusic" src="music/letter_music.wav" preload="auto" loop></audio>
+
+<div class="page">
+
+  <div class="bg-glow glow1"></div>
+  <div class="bg-glow glow2"></div>
+  <div class="bg-glow glow3"></div>
+
+  <span class="doodle d1">♡</span>
+  <span class="doodle d2">✦</span>
+  <span class="doodle d3">♡</span>
+  <span class="doodle d4">✧</span>
+
+  <header class="heading">
+    <small>some words, just for you</small>
+    <h1>A Letter For You ♡</h1>
+    <p>tap the envelope</p>
+  </header>
+
+  <div class="scene">
+
+    <div class="envelope" id="envelope" onclick="openLetter()">
+
+      <!-- PAPER: initially hidden inside the envelope -->
+      <article class="letter">
+        <div class="letter-content">
+
+          <div class="date">FOR YOU, WITH LOVE ♡</div>
+
+          <h2> Happy birthday, Niel ❤️
+,</h2>
+
+          <p>
+            I hope you know how much you deserve good things in this life.
+            I know I don’t always say it, but I’m genuinely grateful that I
+            got to know you and have you in my life.
+            <br><br>
+            I hope this new chapter brings you closer to the things you’ve
+            been working so hard for. I hope your studies, your dreams,
+            your plans, and all the little things you’re trying to build
+            slowly fall into place. And whenever things get overwhelming,
+            I hope you remember that you don’t have to have everything
+            figured out right away.
+            <br><br>
+            Please take care of yourself too, okay? Eat properly, get enough
+            rest, and don’t push yourself too hard. I know you’re busy and
+            you have so many things going on, but you deserve to rest too.
+            <br><br>
+            I’m really proud of you for making it this far, even through
+            the days that probably weren’t easy. I hope you’ll have more
+            reasons to smile this year, more peaceful days, more
+            unforgettable memories, and people around you who genuinely
+            care about you.
+            <br><br>
+            And selfishly… I hope I can still be one of those people who
+            gets to be around for some of those moments.
+            <br><br>
+            Happy birthday again, Niel. Please stay the same annoying,
+            hardworking, and wonderful person that I somehow ended up
+            caring about this much. ❤️
+            <br><br>
+            I hope this year is kind to you. You deserve that.
+          </p>
+
+          <div class="sign">
+          </div>
+
+        </div>
+      </article>
+
+      <!-- ENVELOPE -->
+      <div class="env-back"></div>
+      <div class="fold-left"></div>
+      <div class="fold-right"></div>
+      <div class="front"></div>
+      <div class="flap"></div>
+
+      <div class="seal">♡</div>
+
+    </div>
+
+    <div class="hint">TAP TO OPEN ♡</div>
+
+  </div>
+
+  <button class="back" onclick="location.href='gift.html'">
+    ← Back to Gifts
+  </button>
+
+</div>
+
+<script>
+let opened = false;
+
+function openLetter(){
+
+  if(opened) return;
+  opened = true;
+
+  const envelope = document.getElementById("envelope");
+
+  envelope.classList.add("opened");
+
+  // Start the actual music file after the user taps the envelope.
+  const music = document.getElementById("letterMusic");
+  music.volume = 0.42;
+  music.play().catch(()=>{});
+
+  // hearts appear when the letter comes out
+  setTimeout(() => {
+
+    for(let i = 0; i < 14; i++){
+
+      const p = document.createElement("span");
+
+      p.className = "particle";
+      p.textContent = i % 3 === 0 ? "✦" : "♡";
+
+      p.style.setProperty(
+        "--x",
+        `${(Math.random() - .5) * 230}px`
+      );
+
+      p.style.animationDelay =
+        `${Math.random() * .4}s`;
+
+      document.body.appendChild(p);
+
+      setTimeout(() => p.remove(), 2300);
+    }
+
+  }, 600);
+}
+</script>
+
+
+<script>
+const music = document.getElementById("letterMusic");
+const musicBtn = document.getElementById("musicBtn");
+
+music.addEventListener("play", ()=>{
+  musicBtn.classList.add("playing");
+  musicBtn.textContent = "♫";
+});
+
+music.addEventListener("pause", ()=>{
+  musicBtn.classList.remove("playing");
+  musicBtn.textContent = "♫";
+});
+
+musicBtn.addEventListener("click", ()=>{
+  if(music.paused){
+    music.play().catch(()=>{});
+  }else{
+    music.pause();
+  }
+});
+</script>
+
+</body>
+</html>
